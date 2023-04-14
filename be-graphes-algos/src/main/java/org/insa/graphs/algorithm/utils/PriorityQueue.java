@@ -41,6 +41,8 @@ public interface PriorityQueue<E extends Comparable<E>> {
      */
     public void insert(E x);
 
+    // public void heapify(int index_node);
+
     /**
      * Remove the given element from the priority queue.
      * 

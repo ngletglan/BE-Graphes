@@ -28,15 +28,14 @@ public class Path {
      * @return A path that goes through the given list of nodes.
      * 
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
-     *         consecutive nodes in the list are not connected in the graph.
+     *                                  consecutive nodes in the list are not
+     *                                  connected in the graph.
      * 
-     * Need to be implemented.
      */
-    public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
-            throws IllegalArgumentException {
+    public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
         Arc arc_rapide;
-        // TODO:
+
         /* Aucun noeud */
         if (nodes.size() == 0) {
             return new Path(graph);
@@ -89,15 +88,14 @@ public class Path {
      * @return A path that goes through the given list of nodes.
      * 
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
-     *         consecutive nodes in the list are not connected in the graph.
+     *                                  consecutive nodes in the list are not
+     *                                  connected in the graph.
      * 
-     * Need to be implemented.
      */
-    public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
-            throws IllegalArgumentException {
+    public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
         Arc arc_courte;
-        // TODO:
+ 
         /* Aucun noeud */
         if (nodes.size() == 0) {
             return new Path(graph);
@@ -113,7 +111,7 @@ public class Path {
             for (int i = 1; i < nodes.size(); i++) {
                 Node destination = nodes.get(i);
     
-        // parcours des arcs dont le noeud est l'origine
+                /* Parcours des arcs dont le noeud est l'origine */
                 int numArcs = origine.getNumberOfSuccessors();
                 if (numArcs == 0) {
                     throw new IllegalArgumentException("Node " + origine.getId() + " n'a pas d'arcs");
@@ -146,8 +144,9 @@ public class Path {
      * @return Concatenated path.
      * 
      * @throws IllegalArgumentException if the paths cannot be concatenated (IDs of
-     *         map do not match, or the end of a path is not the beginning of the
-     *         next).
+     *                                  map do not match, or the end of a path is
+     *                                  not the beginning of the
+     *                                  next).
      */
     public static Path concatenate(Path... paths) throws IllegalArgumentException {
         if (paths.length == 0) {
@@ -161,7 +160,7 @@ public class Path {
             }
         }
         ArrayList<Arc> arcs = new ArrayList<>();
-        for (Path path: paths) {
+        for (Path path : paths) {
             arcs.addAll(path.getArcs());
         }
         Path path = new Path(paths[0].getGraph(), arcs);
@@ -196,7 +195,7 @@ public class Path {
      * Create a new path containing a single node.
      * 
      * @param graph Graph containing the path.
-     * @param node Single node of the path.
+     * @param node  Single node of the path.
      */
     public Path(Graph graph, Node node) {
         this.graph = graph;
@@ -208,7 +207,7 @@ public class Path {
      * Create a new path with the given liNode noo:nodesst of arcs.
      * 
      * @param graph Graph containing the path.
-     * @param arcs Arcs to construct the path.
+     * @param arcs  Arcs to construct the path.
      */
     public Path(Graph graph, List<Arc> arcs) {
         this.graph = graph;
@@ -277,10 +276,9 @@ public class Path {
      * 
      * @return true if the path is valid, false otherwise.
      * 
-     * Need to be implemented.
      */
     public boolean isValid() {
-        // TODO:
+  
         List<Arc> arcs=this.getArcs();
         boolean valide=false;
         if (this.isEmpty()){
@@ -309,10 +307,9 @@ public class Path {
      * 
      * @return Total length of the path (in meters).
      * 
-     *  Need to be implemented.
      */
     public float getLength() {
-        // TODO:
+  
         float length=0 ;
         for(Arc compte : this.getArcs()){
             length+= compte.getLength();
@@ -328,10 +325,9 @@ public class Path {
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
      * 
-     *  Need to be implemented.
      */
     public double getTravelTime(double speed) {
-        // TODO:
+
         double time=0 ;
         for(Arc compte : this.getArcs()){
            time+= compte.getTravelTime(speed);
@@ -344,10 +340,9 @@ public class Path {
      * 
      * @return Minimum travel time to travel this path (in seconds).
      * 
-     *  Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // TODO:
+
         double minitime=0 ;
         for(Arc compte : this.getArcs()){
            minitime+= compte.getMinimumTravelTime();
