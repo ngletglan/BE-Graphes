@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 
+import javax.management.MBeanAttributeInfo;
+
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
@@ -20,7 +22,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     @Override
     protected ShortestPathSolution doRun() {
-
+        
         ShortestPathSolution solution = null;
 
         // Retrieve the graph
@@ -29,14 +31,16 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Graph graph = data.getGraph();
         final int nbNodes = graph.size();
 
-        // Initialize array of labels
+        // Notify observers about the first event (origin processed).
+        notifyOriginProcessed(data.getOrigin());
+        
+        // Initialize array of labels(les valeurs sont déjà mis en place dans le construcdeur)
         Label[] labels = new Label[nbNodes];
+        
+        for (Node i : graph.getNodes()){
+            labels[i.getId()]= new Label(i);  
+        }
 
-        for (Label i : labels) {
-            i.realized_cost = Float.POSITIVE_INFINITY; 
-            i.set_father_node(null);
-            //mask(i)= false a déjà fait dans le constructeur
-        } 
         labels[data.getOrigin().getId()].realized_cost = 0;  
 
         // Initialize the priority heap
@@ -52,12 +56,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         debut.set_in_tas();
         debut.set_realized_cost(0);
 
-        // Notify observers about the first event (origin processed).
-        notifyOriginProcessed(data.getOrigin());
-
+        
+      
         /* Tant qu'il existe des sommets non marquées.. */
         while (!fin && !priority_heap.isEmpty()) {
-
+            
             Label current = priority_heap.deleteMin();
 
             // Indiquer aux observateurs que le node a été marqué 
@@ -73,7 +76,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             Iterator<Arc> successorArc = current.get_current_node().iterator();
 
             while (successorArc.hasNext()) {
-
+                System.out.println("parcours infini");
                 Arc arcIter = successorArc.next();
 
                 /* On doit d'abord vérifier qu'on peut prendre cet arc */
@@ -89,7 +92,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 /* Si le label n'existe pas on le crée */
                 if (successorLabel == null) {
                     /* Informer l'observateur de cette création ?? */
-                    notifyAll();
                     successorLabel = new Label(successor);
                     labels[successorLabel.get_current_node().getId()] = successorLabel;
                 } 
@@ -99,7 +101,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
                     /* Si ce coût est meilleur que le coût initial alors on met à jour le coût */
                     if ((successorLabel.get_realized_cost() > (current.get_realized_cost() + data.getCost(arcIter)
-                    + successorLabel.get_realized_cost()+successorLabel.get_cost())) || (successorLabel.get_realized_cost() == Float.POSITIVE_INFINITY)) {
+                    + successorLabel.get_realized_cost()+successorLabel.get_cost())) || (successorLabel.get_realized_cost() == Double.POSITIVE_INFINITY)) {
                         successorLabel.set_realized_cost(current.get_realized_cost() + data.getCost(arcIter));
                         successorLabel.set_father_node(current.get_current_node());
 
@@ -135,7 +137,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             
             while (arc != null) {
                 arcs.add(arc);
-                arc = predecessorArcs[data.getOrigin().getId()];
+                arc = predecessorArcs[arc.getOrigin().getId()];
             } 
 
             /* Renverser le path */
