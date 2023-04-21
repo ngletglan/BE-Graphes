@@ -122,7 +122,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                     
                     priority_heap.insert(successorLabel);
                     predecessorArcs[arcIter.getDestination().getId()] = arcIter;
-                }   
+
+                    }   
                 }  
             } 
         } 
@@ -137,6 +138,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             /* Indiquer aux observateurs qu'on a trouvé une solution */
             notifyDestinationReached(data.getDestination());
 
+            
             /* Créer le path */
             ArrayList<Arc> arcs = new ArrayList<>();
             Arc arc = predecessorArcs[data.getDestination().getId()];
@@ -151,6 +153,22 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
             /* Créer la solution finale */
             solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
+
+            /* Indiquer le coût du chemin trouvé */
+            double cout_dijkstra = labels[data.getDestination().getId()].get_realized_cost();
+            System.out.println("Le coût du chemin trouvé par Dijsktra est " + cout_dijkstra);
+
+
+            /* Comparer avec le coût calculé par la classe Path */
+            Path shortest_path = new Path(graph, arcs);
+            double cout_path = shortest_path.getLength();
+            System.out.println("Le coût du chemin trouvé par Path est " + cout_path);
+
+            if (Math.abs(cout_path - cout_dijkstra) < 0.01) {
+                System.out.println("Le résultat trouvé par Dijsktra est cohérent avec celui calculé par Path");
+            } else {
+                System.out.println("Le résultat trouvé par Dijsktra n'est pas cohérent avec celui calculé par Path, il faut le vérifier!");
+            }
 
         }  
 
