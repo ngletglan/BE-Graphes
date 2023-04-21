@@ -23,6 +23,7 @@ public class Label implements Comparable<Label>{
      /* Vrai si le sommet est dans le tas */
      private boolean in_tas;
 
+
     /* 
      * Les constructeurs
      */
@@ -74,6 +75,10 @@ public class Label implements Comparable<Label>{
     public void set_realized_cost(double realized_cost) {
         this.realized_cost = realized_cost;
     }
+    public double getTotalCost(){
+        return this.realized_cost;
+     
+    }
 
     public void set_father_node(Node father_node) {
         this.father_node = father_node;
@@ -100,5 +105,5 @@ public class Label implements Comparable<Label>{
 
         return resultat;
     } 
-
+   
 }
