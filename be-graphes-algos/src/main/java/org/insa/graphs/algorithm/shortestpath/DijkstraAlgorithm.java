@@ -105,9 +105,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 if (!successorLabel.get_marked()) {
 
                     /* Si ce coût est meilleur que le coût initial alors on met à jour le coût */
-                    if ((successorLabel.get_realized_cost() > (current.get_realized_cost() + data.getCost(arcIter)
-                    + successorLabel.get_realized_cost()+successorLabel.get_cost())) || (successorLabel.get_realized_cost() == Double.POSITIVE_INFINITY)) {
-                        successorLabel.set_realized_cost(current.get_realized_cost() + data.getCost(arcIter));
+                    if ((successorLabel.get_total_cost() > (current.get_total_cost() + data.getCost(arcIter)
+                    + successorLabel.get_total_cost()+successorLabel.get_cost())) || (successorLabel.get_total_cost() == Double.POSITIVE_INFINITY)) {
+                        successorLabel.set_realized_cost(current.get_total_cost() + data.getCost(arcIter));
                         successorLabel.set_father_node(current.get_current_node());
 
                     /* Si le label est déjà dans le tas */
@@ -155,7 +155,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
 
             /* Indiquer le coût du chemin trouvé */
-            double cout_dijkstra = labels[data.getDestination().getId()].get_realized_cost();
+            double cout_dijkstra = labels[data.getDestination().getId()].get_total_cost();
             System.out.println("Le coût du chemin trouvé par Dijsktra est " + cout_dijkstra);
 
 

@@ -24,7 +24,7 @@ public class LabelStar extends Label {
         return cout;
     }
     
-    public double getTotalCost() {
+    public double get_total_cost() {
         return get_realized_cost()+this.estimer_cout();
     }
 }

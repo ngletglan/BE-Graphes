@@ -64,6 +64,11 @@ public class Label implements Comparable<Label>{
         return this.realized_cost;
     }
 
+    public double get_total_cost(){
+        return this.realized_cost;
+     
+    }
+
     /*
      * Les setteurs
      */
@@ -74,10 +79,6 @@ public class Label implements Comparable<Label>{
 
     public void set_realized_cost(double realized_cost) {
         this.realized_cost = realized_cost;
-    }
-    public double getTotalCost(){
-        return this.realized_cost;
-     
     }
 
     public void set_father_node(Node father_node) {
@@ -93,10 +94,10 @@ public class Label implements Comparable<Label>{
 
         int resultat;
 
-        if (this.get_cost() > autre.get_cost()) {
+        if (this.get_total_cost() > autre.get_total_cost()) {
             resultat = 1;
         } 
-        else if (this.get_cost() < autre.get_cost()) {
+        else if (this.get_total_cost() < autre.get_total_cost()) {
             resultat = -1;
         }
         else {
