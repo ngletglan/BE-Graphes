@@ -14,8 +14,12 @@ import org.insa.graphs.algorithm.utils.BinaryHeap;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
+    /* Nombre de sommets visités */
+    protected int nb_sommets_visites;
+
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
+        this.nb_sommets_visites = 0;
     }
 
     @Override
@@ -29,14 +33,15 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Graph graph = data.getGraph();
         final int nbNodes = graph.size();
 
+        // Notify observers about the first event (origin processed).
+        notifyOriginProcessed(data.getOrigin());
+        
         // Initialize array of labels
         Label[] labels = new Label[nbNodes];
 
-        for (Label i : labels) {
-            i.realized_cost = Float.POSITIVE_INFINITY; 
-            i.set_father_node(null);
-            //mask(i)= false a déjà fait dans le constructeur
-        } 
+        for (Node i : graph.getNodes()) {
+            labels[i.getId()] = new Label(i);
+        }  
         labels[data.getOrigin().getId()].realized_cost = 0;  
 
         // Initialize the priority heap
@@ -52,8 +57,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         debut.set_in_tas();
         debut.set_realized_cost(0);
 
-        // Notify observers about the first event (origin processed).
-        notifyOriginProcessed(data.getOrigin());
+        
 
         /* Tant qu'il existe des sommets non marquées.. */
         while (!fin && !priority_heap.isEmpty()) {
@@ -77,7 +81,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 Arc arcIter = successorArc.next();
 
                 /* On doit d'abord vérifier qu'on peut prendre cet arc */
-                /* EX: pour les transports de différente type */
+                /* Ex: il y a des chemins inaccessibles par certains transports */
                 if (!data.isAllowed(arcIter)) {
                     continue;
                 } 
@@ -89,9 +93,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 /* Si le label n'existe pas on le crée */
                 if (successorLabel == null) {
                     /* Informer l'observateur de cette création ?? */
-                    notifyAll();
+                    notifyNodeReached(arcIter.getDestination());
                     successorLabel = new Label(successor);
                     labels[successorLabel.get_current_node().getId()] = successorLabel;
+
+                    /* Incrémenter le nombre de sommets visités */
+                    this.nb_sommets_visites++;
                 } 
 
                 /* Si le successeur n'est pas marqué.. */
@@ -99,7 +106,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
                     /* Si ce coût est meilleur que le coût initial alors on met à jour le coût */
                     if ((successorLabel.get_realized_cost() > (current.get_realized_cost() + data.getCost(arcIter)
-                    + successorLabel.get_realized_cost()+successorLabel.get_cost())) || (successorLabel.get_realized_cost() == Float.POSITIVE_INFINITY)) {
+                    + successorLabel.get_realized_cost()+successorLabel.get_cost())) || (successorLabel.get_realized_cost() == Double.POSITIVE_INFINITY)) {
                         successorLabel.set_realized_cost(current.get_realized_cost() + data.getCost(arcIter));
                         successorLabel.set_father_node(current.get_current_node());
 
@@ -112,6 +119,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                     else {
                         successorLabel.set_in_tas();
                     } 
+                    
                     priority_heap.insert(successorLabel);
                     predecessorArcs[arcIter.getDestination().getId()] = arcIter;
                 }   
@@ -135,7 +143,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             
             while (arc != null) {
                 arcs.add(arc);
-                arc = predecessorArcs[data.getOrigin().getId()];
+                arc = predecessorArcs[arc.getOrigin().getId()];
             } 
 
             /* Renverser le path */
@@ -148,5 +156,15 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
         return solution;
     }
+
+    /* Créer le label correspondant au node */
+    protected Label new_label(Node node) {
+        return new Label(node);
+    } 
+
+    /* Compter le nombre de sommets visités */
+    protected int get_nb_sommets_visites() {
+        return this.nb_sommets_visites;
+    } 
 
 }
