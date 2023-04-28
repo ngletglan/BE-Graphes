@@ -1,30 +1,31 @@
 package org.insa.graphs.algorithm.shortestpath;
 
-import javax.xml.crypto.Data;
-
-import org.insa.graphs.algorithm.AbstractInputData.Mode;
+import org.insa.graphs.algorithm.AbstractInputData;
 import org.insa.graphs.model.Node;
+import org.insa.graphs.model.Point;
 
-public class LabelStar extends Label {
-    private ShortestPathData data;
+public class LabelStar extends Label implements Comparable<Label>{
+
+    private double inf;
+
     public LabelStar(Node node,ShortestPathData donneData){
+
         super(node);
-        this.data=donneData;
-    }
-    public double estimer_cout(){
-        double cout;
-        Node currentNode=this.get_current_node();
-        if(this.data.getMode()== ShortestPathData.Mode.LENGTH){
-            cout=currentNode.getPoint().distanceTo(this.data.getDestination().getPoint());
-        }
-        else{
-            cout=currentNode.getPoint().distanceTo(this.data.getDestination().getPoint())/this.data.getGraph().getGraphInformation().getMaximumSpeed();
+
+        /* Cas 1 : On cherche LE PLUS COURT chemin */
+        if(donneData.getMode()== AbstractInputData.Mode.LENGTH) {
+            this.inf = (double)Point.distance(node.getPoint(), donneData.getDestination().getPoint());
         }
 
-        return cout;
+        /* Cas 2 : On cherche LE PLUS RAPIDE chemin */
+        else {
+            int vitesse = Math.max(donneData.getGraph().getGraphInformation().getMaximumSpeed(), donneData.getMaximumSpeed());
+            this.inf = (double)Point.distance(node.getPoint(), donneData.getDestination().getPoint())/(vitesse*1000/3600);
+        }
     }
     
+    /* Renvoyer le coût de l'origine jusqu'au noeud + la distance du vol d'oiseau du noeud jusqu'à la destination */
     public double get_total_cost() {
-        return get_realized_cost()+this.estimer_cout();
+        return this.inf + this.get_realized_cost();
     }
 }

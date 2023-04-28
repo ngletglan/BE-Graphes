@@ -2,7 +2,7 @@ package org.insa.graphs.algorithm;
 
 import org.insa.graphs.algorithm.AbstractInputData.Mode;
 import org.insa.graphs.model.Arc;
-//import org.insa.graphs.model.GraphStatistics;
+import org.insa.graphs.model.GraphStatistics;
 
 /**
  * This class can be used to indicate to an algorithm which arcs can be used and
@@ -33,7 +33,7 @@ public interface ArcInspector {
      * @return The maximum speed for this inspector, or
      *         {@link GraphStatistics#NO_MAXIMUM_SPEED} if none is set.
      */
-    /* public int getMaximumSpeed(); */
+    public int getMaximumSpeed(); 
 
     /**
      * @return Mode for this arc inspector.
