@@ -18,12 +18,14 @@ public class LabelStar extends Label implements Comparable<Label>{
         }
 
         /* Cas 2 : On cherche LE PLUS RAPIDE chemin */
+        /* vitesse en kilomètres donc convertir en mètres */
         else {
             int vitesse = Math.max(donneData.getGraph().getGraphInformation().getMaximumSpeed(), donneData.getMaximumSpeed());
             this.inf = (double)Point.distance(node.getPoint(), donneData.getDestination().getPoint())/(vitesse*1000/3600);
         }
     }
     
+   @Override 
     /* Renvoyer le coût de l'origine jusqu'au noeud + la distance du vol d'oiseau du noeud jusqu'à la destination */
     public double get_total_cost() {
         return this.inf + this.get_realized_cost();
