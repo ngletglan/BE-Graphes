@@ -40,7 +40,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Label[] labels = new Label[nbNodes];
 
         for (Node i : graph.getNodes()) {
-            labels[i.getId()] = new Label(i);
+            labels[i.getId()] = new_label(i,data);
         }  
         labels[data.getOrigin().getId()].realized_cost = 0;  
 
@@ -51,13 +51,13 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Arc[] predecessorArcs = new Arc[nbNodes];
 
         // Insert the debut node
-        Label debut = new Label(data.getOrigin());
+        Label debut = new_label(data.getOrigin(),data);
         labels[debut.get_current_node().getId()] = debut;
         priority_heap.insert(debut);
         debut.set_in_tas();
         debut.set_realized_cost(0);
 
-        
+        notifyOriginProcessed(data.getOrigin());
 
         /* Tant qu'il existe des sommets non marquées.. */
         while (!fin && !priority_heap.isEmpty()) {
@@ -94,7 +94,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 if (successorLabel == null) {
                     /* Informer l'observateur de cette création ?? */
                     notifyNodeReached(arcIter.getDestination());
-                    successorLabel = new Label(successor);
+                    successorLabel = new_label(successor,data);
                     labels[successorLabel.get_current_node().getId()] = successorLabel;
 
                     /* Incrémenter le nombre de sommets visités */
@@ -105,9 +105,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 if (!successorLabel.get_marked()) {
 
                     /* Si ce coût est meilleur que le coût initial alors on met à jour le coût */
-                    if ((successorLabel.get_total_cost() > (current.get_total_cost() + data.getCost(arcIter)
-                    + successorLabel.get_total_cost()+successorLabel.get_cost())) || (successorLabel.get_total_cost() == Double.POSITIVE_INFINITY)) {
-                        successorLabel.set_realized_cost(current.get_total_cost() + data.getCost(arcIter));
+                    if((successorLabel.get_total_cost()>(current.get_cost()+data.getCost(arcIter)
+						+(successorLabel.get_total_cost()-successorLabel.get_cost()))) || (successorLabel.get_cost() == Double.POSITIVE_INFINITY)) {
+                        successorLabel.set_realized_cost(current.get_cost() + data.getCost(arcIter));
                         successorLabel.set_father_node(current.get_current_node());
 
                     /* Si le label est déjà dans le tas */
@@ -176,7 +176,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     }
 
     /* Créer le label correspondant au node */
-    protected Label new_label(Node node) {
+    protected Label new_label(Node node,ShortestPathData Data) {
         return new Label(node);
     } 
 
