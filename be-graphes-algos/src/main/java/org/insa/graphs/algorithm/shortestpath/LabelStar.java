@@ -15,10 +15,10 @@ public class LabelStar extends Label {
     public double estimer_cout(){
 	double cout=0;
 	Node currentNode=this.get_current_node();
-	if(this.data.getMode()== ShortestPathData.Mode.LENGTH){
+	if(this.data.getMode() == ShortestPathData.Mode.LENGTH){
             cout=currentNode.getPoint().distanceTo(this.data.getDestination().getPoint());
 	}
-    else if(this.data.getMode()== ShortestPathData.Mode.TIME){
+        else if(this.data.getMode() == ShortestPathData.Mode.TIME){
             cout=currentNode.getPoint().distanceTo(this.data.getDestination().getPoint())/this.data.getGraph().getGraphInformation().getMaximumSpeed();
 	    }
     
