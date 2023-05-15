@@ -47,13 +47,13 @@ public class Launch {
     public static void main(String[] args) throws Exception {
 
         // Visit these directory to see the list of available files on Commetud.
-        final String mapName = "/home/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
-        final String pathName = "/home/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31insa_rangueil_r2.path";
-
+        final String mapName = "be-graphes-gui/src/main/java/org/insa/graphs/gui/simple/insa.mapgr";
+        final String pathName = "be-graphes-gui/src/main/java/org/insa/graphs/gui/simple/path_fr31insa_rangueil_r2.path";
+        
         // Create a graph reader.
         final GraphReader reader = new BinaryGraphReader(
                 new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
-
+        
         // Read the graph.
         final Graph graph = reader.read();
 
